@@ -8,32 +8,32 @@ import 'package:bloc/bloc.dart';
 /// [DataBlocSync] is a [Bloc] that handles the data fetching and
 /// parsing synchronously. 
 ///==============================================================
-class TextBloc extends DataBlocSync<String> {
-  TextBloc() : super(DataUninitialized());
+class GreetBloc extends DataBloc<String> {
+  GreetBloc() : super(DataUninitialized());
 
   @override
-  Either<Failure, String> fetchAndParseDataSync<Failure>(
-      DataState<String> oldState, FetchDataSync event) {
-    final p = event.param as TextFetchParam;
-    return Right(p.text);
+  Future<Either<Failure, String>> fetchAndParseData<Failure>(
+      DataState<String> oldState, FetchData event) async{
+    final p = event.param as GreetFetchParam;
+    await Future.delayed(Duration(seconds:2)); // network call place holder
+    return Right(p.name);
   }
 }
 
 
-/// [FetchParam] is a class that holds the parameters for the [FetchData] event.
-class TextFetchParam extends FetchParam {
-  final String text;
-  const TextFetchParam(this.text);
+/// [FetchParam] is a class that holds the optional parameters for the [FetchData] event.
+class GreetFetchParam extends FetchParam {
+  final String name;
+  const GreetFetchParam(this.name);
 
   @override
-  List<Object?> get props => [text];
+  List<Object?> get props => [name];
 }
 
 void main() {
-  final bloc = TextBloc();
-  bloc.add(FetchDataSync<String>(TextFetchParam('hello ajeet')));
+  final bloc = GreetBloc();
+  bloc.add(FetchData<String>(GreetFetchParam('ajeet')));
   bloc.stream.listen((event) {
     print(event);
   });
 }
-
