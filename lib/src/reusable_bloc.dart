@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
-import 'package:reusable_bloc/reusable_bloc.dart';
+import 'package:reusable_bloc/src/reusable_event.dart';
+import 'package:reusable_bloc/src/reusable_state.dart';
 import 'reusable_event_handler.dart';
 
 abstract class DataBloc<T> extends Bloc<DataEvent<T>, DataState<T>> {
