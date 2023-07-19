@@ -55,7 +55,6 @@ class DataEventHandler<T> {
     });
   }
 
-
   /// Handler for [FetchData] + [DataUninitialized] combination.
   /// Handles initial fetch when the  data is not yet present.
   ///
@@ -65,8 +64,7 @@ class DataEventHandler<T> {
     FetchDataSync<T> event,
     DataUninitialized state,
     Emitter<DataState<T>> emit,
-    Either<F, T> Function<F>(DataState<T>, FetchDataSync<T>)
-        fetchAndParseData,
+    Either<F, T> Function<F>(DataState<T>, FetchDataSync<T>) fetchAndParseData,
   ) async {
     emit(DataInitialFetching());
     final res = fetchAndParseData(state as DataState<T>, event);
@@ -89,8 +87,7 @@ class DataEventHandler<T> {
     FetchDataSync<T> event,
     DataLoaded<T> state,
     Emitter<DataState<T>> emit,
-    Either<F, T> Function<F>(DataState<T>, FetchDataSync<T>)
-        fetchAndParseData,
+    Either<F, T> Function<F>(DataState<T>, FetchDataSync<T>) fetchAndParseData,
   ) async {
     emit(DataRefetching(state));
     final res = fetchAndParseData(state, event);

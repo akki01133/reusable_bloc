@@ -12,7 +12,8 @@ class FetchData<T> extends DataEvent<T> {
   bool get hasParam => _param is! NoFetchParam;
   FetchParam get param => _param;
   const FetchData([FetchParam? param])
-      : _param = param ?? const NoFetchParam(),super();
+      : _param = param ?? const NoFetchParam(),
+        super();
 
   @override
   List<Object?> get props => [...super.props];
