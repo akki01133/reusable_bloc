@@ -1,6 +1,5 @@
-
-
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:reusable_bloc/src/reusable_event.dart';
 import 'package:reusable_bloc/src/reusable_state.dart';
 
@@ -13,42 +12,46 @@ class DataEventHandler<T> {
   /// On success it emits: [DataInitialFetching], [DataLoaded].
   /// On failure it emits: [DataInitialFetching], [DataInitialFetchingError], [DataUninitialized].
   Future<void> mapInitialFetchDataToState(
-    FetchData event,
+    FetchData<T> event,
     DataUninitialized state,
     Emitter<DataState<T>> emit,
-    Function(DataState<T>, FetchData) fetchAndParseData,
+    Future<Either<F, T>> Function<F>(DataState<T>, FetchData<T>)
+        fetchAndParseData,
   ) async {
-    try {
-      emit(DataInitialFetching());
-      final T data = await fetchAndParseData(state as DataState<T>, event);
-      emit(DataLoaded(data));
-    } catch (e) {
-      print(e);
+    emit(DataInitialFetching());
+    final res = await fetchAndParseData(state as DataState<T>, event);
+
+    res.fold((e) {
       emit(DataInitialFetchingError(e));
       emit(DataUninitialized());
-    }
+    }, (data) {
+      // skipped the fetching success state
+      emit(DataLoaded(data));
+    });
   }
 
   /// Handler for [FetchData] + [DataLoaded] combination.
   /// Handles refetch of the  data.
   ///
   /// On success it emits: [DataRefetching], [DataLoaded].
-  /// On failure it emits: [DataRefetching], [DataRefetchingFailed], [DataLoaded].
+  /// On failure it emits: [DataRefetching], [DataRefetchingError], [DataLoaded].
   Future<void> mapRefetchDataToState(
     FetchData<T> event,
     DataLoaded<T> state,
     Emitter<DataState<T>> emit,
-    Function(DataState<T>, FetchData<T>) fetchAndParseData,
+    Future<Either<F, T>> Function<F>(DataState<T>, FetchData<T>)
+        fetchAndParseData,
   ) async {
-    try {
-      emit(DataRefetching(state));
-      final T data = await fetchAndParseData(state, event);
+    emit(DataRefetching(state));
+    final res = await fetchAndParseData(state, event);
+    final T data = res.getOrElse(() => state.data);
+
+    res.fold((l) {
+      emit(DataRefetchingError(l, state));
+      emit(DataLoaded(data));
+    }, (r) {
       emit(DataRefetchingSuccess(data));
       emit(DataLoaded(data));
-    } catch (e) {
-      print(e);
-      emit(DataRefetchingError(state, e));
-      emit(DataLoaded.clone(state));
-    }
+    });
   }
 }
