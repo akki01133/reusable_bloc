@@ -52,7 +52,7 @@ abstract class DataInitialized<T>  extends DataState<T>{
 }
 
 class DataLoaded<T> extends DataInitialized<T>  {
-  DataLoaded({required T data}) : super(data: data);
+  DataLoaded( T data) : super(data: data);
   DataLoaded.clone(DataInitialized<T>  oldState) : super.clone(oldState);
 }
 
@@ -61,7 +61,7 @@ class DataRefetching<T> extends DataInitialized<T>  with DataFetching<T> {
 }
 
 class DataRefetchingSuccess<T> extends DataInitialized<T>  with DataSuccess<T> {
-  DataRefetchingSuccess({required T data}) : super(data: data);
+  DataRefetchingSuccess(T data) : super(data: data);
 }
 
 class DataRefetchingError<T> extends DataInitialized<T>  with DataError<T> {
