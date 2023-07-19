@@ -8,7 +8,11 @@ abstract class DataEvent<T> extends Equatable {
 }
 
 class FetchData<T> extends DataEvent<T> {
-  const FetchData() : super();
+  final FetchParam _param;
+  bool get hasParam => _param is! NoFetchParam;
+  FetchParam get param => _param;
+  const FetchData([FetchParam? param])
+      : _param = param ?? const NoFetchParam(),super();
 
   @override
   List<Object?> get props => [...super.props];
