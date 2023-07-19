@@ -16,3 +16,10 @@ class FetchData<T> extends DataEvent<T> {
   @override
   List<Object?> get props => [...super.props];
 }
+
+class FetchDataSync<T> extends DataEvent<T> {
+  const FetchDataSync() : super();
+
+  @override
+  List<Object?> get props => [...super.props];
+}
