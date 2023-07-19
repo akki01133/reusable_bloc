@@ -1,5 +1,5 @@
 name: reusable_bloc
-description: A starting point for Dart libraries or applications.
+description: A generic bloc to fetch(and/or refetch) network data easily.
 version: 1.0.0
 repository: https://github.com/akki01133/reusable_bloc.git
 
