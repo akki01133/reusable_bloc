@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:reusable_bloc/src/reusable_event.dart';
 import 'package:reusable_bloc/src/reusable_state.dart';
 
-class DataEventHandler<Data> {
+class DataEventHandler<T> {
   const DataEventHandler();
 
   /// Handler for [FetchData] + [DataUninitialized] combination.
@@ -15,12 +15,12 @@ class DataEventHandler<Data> {
   Future<void> mapInitialFetchDataToState(
     FetchData event,
     DataUninitialized state,
-    Emitter<DataState<Data>> emit,
-    Function(DataState<Data>, FetchData) fetchAndParseData,
+    Emitter<DataState<T>> emit,
+    Function(DataState<T>, FetchData) fetchAndParseData,
   ) async {
     try {
       emit(DataInitialFetching());
-      final Data data = await fetchAndParseData(state as DataState<Data>, event);
+      final T data = await fetchAndParseData(state as DataState<T>, event);
       emit(DataLoaded(data));
     } catch (e) {
       print(e);
@@ -35,14 +35,14 @@ class DataEventHandler<Data> {
   /// On success it emits: [DataRefetching], [DataLoaded].
   /// On failure it emits: [DataRefetching], [DataRefetchingFailed], [DataLoaded].
   Future<void> mapReFetchDataToState(
-    FetchData<Data> event,
-    DataLoaded<Data> state,
-    Emitter<DataState<Data>> emit,
-    Function(DataState<Data>, FetchData<Data>) fetchAndParseData,
+    FetchData<T> event,
+    DataLoaded<T> state,
+    Emitter<DataState<T>> emit,
+    Function(DataState<T>, FetchData<T>) fetchAndParseData,
   ) async {
     try {
       emit(DataRefetching(state));
-      final Data data = await fetchAndParseData(state, event);
+      final T data = await fetchAndParseData(state, event);
       emit(DataRefetchingSuccess(data));
       emit(DataLoaded(data));
     } catch (e) {
