@@ -34,7 +34,7 @@ class DataEventHandler<T> {
   ///
   /// On success it emits: [DataRefetching], [DataLoaded].
   /// On failure it emits: [DataRefetching], [DataRefetchingFailed], [DataLoaded].
-  Future<void> mapReFetchDataToState(
+  Future<void> mapRefetchDataToState(
     FetchData<T> event,
     DataLoaded<T> state,
     Emitter<DataState<T>> emit,
