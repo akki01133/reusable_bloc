@@ -11,7 +11,6 @@ abstract class DataBloc<T> extends Bloc<DataEvent<T>, DataState<T>> {
       : _handler = DataEventHandler<T>(),
         super(initialState) {
     on<FetchData<T>>(_mapFetchDataToState);
-    on<FetchDataSync<T>>(_mapFetchDataToStateSync);
   }
 
   /// Propagates the [FetchData] event down to the corresponding event handler.
@@ -61,22 +60,5 @@ abstract class DataBloc<T> extends Bloc<DataEvent<T>, DataState<T>> {
   /// The [oldState] and thus the old [Data] object is also accesible,
   /// if merging of the new and old data is required.
   Future<Either<Failure, T>> fetchAndParseData<Failure>(
-      DataState<T> oldState, FetchData event) => throw UnimplementedError(
-      'Async fetching not implemented');
-
-  FutureOr<void> _mapFetchDataToStateSync(
-      FetchDataSync<T> event, Emitter<DataState<T>> emit) {
-    return _handleStatesOnEvent(
-      isNoOp:
-          state is DataFetching || state is DataError || state is DataSuccess,
-      onDataUninitialized: () => _handler.mapInitialFetchDataToStateSync(
-          event, state as DataUninitialized, emit, fetchAndParseDataSync),
-      onDataLoaded: () => _handler.mapRefetchDataToStateSync(
-          event, state as DataLoaded<T>, emit, fetchAndParseDataSync),
-    );
-  }
-
-  Either<Failure, T> fetchAndParseDataSync<Failure>(
-          DataState<T> oldState, FetchDataSync event) =>
-      throw UnimplementedError('Sync fetching not implemented');
+      DataState<T> oldState, FetchData event);
 }
