@@ -37,6 +37,14 @@ class FetchDataSync<T> extends DataEventSync<T> {
   List<Object?> get props => [...super.props];
 }
 
+///====================================================================
+/// [FetchParam] is a parameter class that can be used to pass
+/// parameters to both the [FetchDataSync] and [FetchData] events.
+/// It is a [Equatable] class and thus can be used to compare
+/// equality of two [FetchParam] objects.
+/// [FetchParam] is optional and can be omitted from the [FetchDataSync]
+/// and [FetchData] events.
+/// ====================================================================
 abstract class FetchParam extends Equatable {
   const FetchParam();
 }

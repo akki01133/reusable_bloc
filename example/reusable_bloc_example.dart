@@ -1,18 +1,13 @@
 import 'package:dartz/dartz.dart';
-import 'package:equatable/equatable.dart';
 import 'package:reusable_bloc/reusable_bloc.dart';
 import 'package:reusable_bloc/src/reusable_bloc_sync.dart';
+import 'package:bloc/bloc.dart';
 
-abstract class Failure extends Equatable {
-  const Failure();
-  @override
-  List<Object?> get props => [];
-}
-
-class TextFailure extends Failure {
-  const TextFailure();
-}
-
+///==============================================================
+/// Example of [DataBlocSync]
+/// [DataBlocSync] is a [Bloc] that handles the data fetching and
+/// parsing synchronously. 
+///==============================================================
 class TextBloc extends DataBlocSync<String> {
   TextBloc() : super(DataUninitialized());
 
@@ -24,6 +19,8 @@ class TextBloc extends DataBlocSync<String> {
   }
 }
 
+
+/// [FetchParam] is a class that holds the parameters for the [FetchData] event.
 class TextFetchParam extends FetchParam {
   final String text;
   const TextFetchParam(this.text);
@@ -39,3 +36,4 @@ void main() {
     print(event);
   });
 }
+
