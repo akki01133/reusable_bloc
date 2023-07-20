@@ -13,3 +13,7 @@
 ## 1.0.3
 
 - Changed data type of the bloc 
+
+## 1.0.4 
+
+- Changed dart sdk version
