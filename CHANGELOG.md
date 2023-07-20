@@ -9,3 +9,7 @@
 ## 1.0.2
 
 - Applied Dart Formatter to style the code
+
+## 1.0.3
+
+- Changed data type of the bloc 

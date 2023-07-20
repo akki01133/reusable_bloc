@@ -5,11 +5,11 @@ import 'package:reusable_bloc/src/reusable_event.dart';
 import 'package:reusable_bloc/src/reusable_state.dart';
 import 'reusable_event_handler.dart';
 
-abstract class DataBlocSync<T> extends Bloc<DataEventSync<T>, DataState<T>> {
-  final DataEventHandler<T> _handler;
+abstract class DataBlocSync<L, T> extends Bloc<DataEventSync<T>, DataState<T>> {
+  final DataEventHandler<L, T> _handler;
 
   DataBlocSync(DataState<T> initialState)
-      : _handler = DataEventHandler<T>(),
+      : _handler = DataEventHandler<L, T>(),
         super(initialState) {
     on<FetchDataSync<T>>(_mapFetchDataToStateSync);
   }

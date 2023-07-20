@@ -3,7 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:reusable_bloc/src/reusable_event.dart';
 import 'package:reusable_bloc/src/reusable_state.dart';
 
-class DataEventHandler<T> {
+class DataEventHandler<L, T> {
   const DataEventHandler();
 
   /// Handler for [FetchData] + [DataUninitialized] combination.
@@ -15,8 +15,7 @@ class DataEventHandler<T> {
     FetchData<T> event,
     DataUninitialized state,
     Emitter<DataState<T>> emit,
-    Future<Either<F, T>> Function<F>(DataState<T>, FetchData<T>)
-        fetchAndParseData,
+    Future<Either<L, T>> Function(DataState<T>, FetchData<T>) fetchAndParseData,
   ) async {
     emit(DataInitialFetching());
     final res = await fetchAndParseData(state as DataState<T>, event);
@@ -39,15 +38,14 @@ class DataEventHandler<T> {
     FetchData<T> event,
     DataLoaded<T> state,
     Emitter<DataState<T>> emit,
-    Future<Either<F, T>> Function<F>(DataState<T>, FetchData<T>)
-        fetchAndParseData,
+    Future<Either<L, T>> Function(DataState<T>, FetchData<T>) fetchAndParseData,
   ) async {
     emit(DataRefetching(state));
     final res = await fetchAndParseData(state, event);
     final T data = res.getOrElse(() => state.data);
 
     res.fold((l) {
-      emit(DataRefetchingError(l, state));
+      emit(DataRefetchingError(state, l));
       emit(DataLoaded(data));
     }, (r) {
       emit(DataRefetchingSuccess(data));

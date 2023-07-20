@@ -5,11 +5,11 @@ import 'package:reusable_bloc/src/reusable_event.dart';
 import 'package:reusable_bloc/src/reusable_state.dart';
 import 'reusable_event_handler.dart';
 
-abstract class DataBloc<T> extends Bloc<DataEvent<T>, DataState<T>> {
-  final DataEventHandler<T> _handler;
+abstract class DataBloc<L, T> extends Bloc<DataEvent<T>, DataState<T>> {
+  final DataEventHandler<L, T> _handler;
 
   DataBloc(DataState<T> initialState)
-      : _handler = DataEventHandler<T>(),
+      : _handler = DataEventHandler<L, T>(),
         super(initialState) {
     on<FetchData<T>>(_mapFetchDataToState);
   }
@@ -60,6 +60,6 @@ abstract class DataBloc<T> extends Bloc<DataEvent<T>, DataState<T>> {
   /// parses the response and returns the parsed [Data] Object.
   /// The [oldState] and thus the old [Data] object is also accesible,
   /// if merging of the new and old data is required.
-  Future<Either<Failure, T>> fetchAndParseData<Failure>(
+  Future<Either<L, T>> fetchAndParseData(
       DataState<T> oldState, FetchData event);
 }
